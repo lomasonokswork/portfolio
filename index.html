@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vārds Uzvārds - Backend izstrādātājs</title>
+<meta name="description" content="PHP, Laravel un SQL izstrādātājs. Portfolio un kontaktinformācija." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ECE4D0'/%3E%3Cellipse cx='50' cy='24' rx='30' ry='10' fill='none' stroke='%231F4B44' stroke-width='6'/%3E%3Cpath d='M20 24 V76 A30 10 0 0 0 80 76 V24' fill='none' stroke='%231F4B44' stroke-width='6'/%3E%3Cpath d='M20 50 A30 10 0 0 0 80 50' fill='none' stroke='%231F4B44' stroke-width='6'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ECE4D0;
+    --paper-light: #F7F2E4;
+    --ink: #23262B;
+    --ink-soft: #4A4E45;
+    --teal: #1F4B44;
+    --teal-deep: #163732;
+    --rust: #C1440E;
+    --line: #B7A98A;
+    --card-shadow: #1F4B44;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Archivo", sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--rust); color:var(--paper-light); }
+
+  a{ color:inherit; }
+  h1,h2,h3{
+    font-family:"Archivo", sans-serif;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  .mono{
+    font-family:"IBM Plex Mono", monospace;
+  }
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:3px solid var(--rust);
+    outline-offset:3px;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:var(--paper);
+    border-bottom:2px solid var(--ink);
+  }
+  .headbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 28px;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .wordmark{
+    font-family:"IBM Plex Mono", monospace;
+    font-weight:600;
+    font-size:0.95rem;
+    letter-spacing:0.01em;
+  }
+  .wordmark span{ color:var(--teal); }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap:26px;
+    margin:0;
+    padding:0;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.85rem;
+  }
+  nav a{ text-decoration:none; border-bottom:2px solid transparent; padding-bottom:2px; }
+  nav a:hover{ border-bottom-color:var(--rust); }
+  .nav-toggle{ display:none; background:none; border:2px solid var(--ink); padding:6px 10px; font-family:"IBM Plex Mono",monospace; cursor:pointer; }
+
+  @media (max-width:720px){
+    nav{ display:none; }
+    nav.open{ display:block; position:absolute; left:0; right:0; top:100%; background:var(--paper); border-bottom:2px solid var(--ink); padding:14px 28px; }
+    nav.open ul{ flex-direction:column; gap:16px; }
+    .nav-toggle{ display:inline-block; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:70px 0 90px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:40px;
+    align-items:end;
+  }
+  @media (max-width:860px){
+    .hero-grid{ grid-template-columns:1fr; }
+  }
+
+  .terminal{
+    background:var(--teal-deep);
+    color:#E9E4D3;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.88rem;
+    line-height:1.7;
+    padding:22px 24px;
+    box-shadow:8px 8px 0 var(--ink);
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+  }
+  .terminal .p1::before{ content:"mysql> "; color:#7FB8A6; }
+  .terminal .p2::before{ content:"    -> "; color:#7FB8A6; }
+  .terminal .result{
+    margin-top:14px;
+    border-top:1px dashed #4C7A70;
+    padding-top:12px;
+    color:#D9A125;
+    white-space:pre;
+    font-size:0.82rem;
+  }
+  .cursor{
+    display:inline-block;
+    width:8px; height:1em;
+    background:#D9A125;
+    margin-left:2px;
+    vertical-align:-2px;
+    animation:blink 1s steps(1) infinite;
+  }
+  @media (prefers-reduced-motion:reduce){ .cursor{ animation:none; } }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-name{
+    text-align:right;
+  }
+  .hero-name .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--teal);
+    font-size:0.85rem;
+    display:block;
+    margin-bottom:6px;
+  }
+  .hero-name h1{
+    font-size:clamp(2.4rem, 6vw, 4rem);
+    font-weight:800;
+    line-height:0.98;
+  }
+  .hero-name .role{
+    margin-top:14px;
+    font-size:1.15rem;
+    color:var(--ink-soft);
+    font-weight:500;
+  }
+  .hero-name .stack{
+    margin-top:10px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.85rem;
+    color:var(--rust);
+  }
+  @media (max-width:860px){
+    .hero-name{ text-align:left; }
+  }
+
+  /* ---------- sections ---------- */
+  section{ padding:64px 0; border-bottom:2px solid var(--ink); }
+  section:last-of-type{ border-bottom:none; }
+
+  .section-head{ margin-bottom:34px; max-width:640px; }
+  .section-head .tag{
+    display:block;
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--teal);
+    font-size:0.9rem;
+    margin-bottom:6px;
+  }
+  .section-head h2{
+    font-size:clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight:700;
+  }
+
+  /* about */
+  .about-body{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  @media (max-width:760px){ .about-body{ grid-template-columns:1fr; } }
+  .about-body p{ max-width:62ch; font-size:1.05rem; }
+  .record{
+    background:var(--paper-light);
+    border:1px solid var(--ink);
+    box-shadow:6px 6px 0 var(--card-shadow);
+    padding:22px 22px 6px;
+    clip-path:polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+    align-self:start;
+  }
+  .record .tag{
+    display:block;
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--teal);
+    font-size:0.85rem;
+    margin-bottom:12px;
+  }
+  .record .row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:14px;
+    padding:10px 0;
+    border-bottom:1px dotted var(--line);
+  }
+  .record .row:last-child{ border-bottom:none; }
+  .record .k{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .record .v{
+    font-family:"Archivo", sans-serif;
+    font-weight:600;
+    font-size:0.92rem;
+    text-align:right;
+  }
+
+  /* skills table */
+  .schema-label{ font-family:"IBM Plex Mono", monospace; font-size:0.85rem; color:var(--ink-soft); margin-bottom:10px; }
+  table.skills{
+    width:100%;
+    border-collapse:collapse;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.92rem;
+  }
+  table.skills th{
+    text-align:left;
+    padding:10px 14px;
+    background:var(--ink);
+    color:var(--paper-light);
+    font-weight:500;
+  }
+  table.skills td{
+    padding:11px 14px;
+    border-bottom:1px solid var(--line);
+  }
+  table.skills tr:nth-child(even) td{ background:var(--paper-light); }
+  .dots{ color:var(--rust); letter-spacing:2px; }
+  .skills-todo{
+    margin-top:14px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+  }
+  .skills-todo::before{ content:"-- "; color:var(--teal); }
+
+  /* projects */
+  .projects{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:26px;
+  }
+  @media (max-width:900px){ .projects{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:620px){ .projects{ grid-template-columns:1fr; } }
+  .card{
+    background:var(--paper-light);
+    border:1px solid var(--ink);
+    box-shadow:6px 6px 0 var(--card-shadow);
+    padding:22px 20px 20px;
+    position:relative;
+  }
+  .card:nth-child(2){ transform:translateY(18px); }
+  @media (max-width:900px){ .card:nth-child(2){ transform:none; } }
+  .card .holes{ position:absolute; top:10px; left:12px; display:flex; gap:8px; }
+  .card .holes span{ width:8px; height:8px; border-radius:50%; background:var(--paper); border:1.5px solid var(--ink-soft); display:block; }
+  .card h3{ margin-top:20px; font-size:1.12rem; }
+  .card p{ font-size:0.95rem; color:var(--ink-soft); margin:10px 0 14px; }
+  .tags{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .tags span{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    border:1px solid var(--teal);
+    color:var(--teal);
+    padding:3px 8px;
+  }
+  .card a.link{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.85rem;
+    text-decoration:underline;
+    text-decoration-color:var(--rust);
+    text-underline-offset:3px;
+  }
+  .projects-note{
+    margin-top:20px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+  }
+
+  /* contact */
+  .contact-box{
+    background:var(--teal-deep);
+    color:#E9E4D3;
+    padding:30px 28px;
+    font-family:"IBM Plex Mono", monospace;
+    box-shadow:8px 8px 0 var(--ink);
+  }
+  .contact-box .line{ margin-bottom:10px; }
+  .contact-box .prompt::before{ content:"$ "; color:#7FB8A6; }
+  .contact-box a{ color:#D9A125; text-decoration:underline; }
+  .contact-box a:hover{ color:#fff; }
+
+  footer{
+    padding:26px 0 40px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="headbar">
+    <div class="wordmark">izstrāde<span>.dev</span></div>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav">izvēlne</button>
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#par-mani">Par mani</a></li>
+        <li><a href="#prasmes">Prasmes</a></li>
+        <li><a href="#projekti">Projekti</a></li>
+        <li><a href="#kontakti">Kontakti</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="terminal">
+        <div class="p1">SELECT vārds, amats</div>
+        <div class="p2">FROM izstrādātājs</div>
+        <div class="p2">WHERE pieejams = TRUE;</div>
+        <div class="result">+-------------+---------------------+
+| vards       | statuss             |
++-------------+---------------------+
+| Vārds       | 3. kursa students   |
++-------------+---------------------+
+1 row in set<span class="cursor"></span></div>
+      </div>
+
+      <div class="hero-name">
+        <span class="eyebrow">-- profils</span>
+        <h1>Vārds<br>Uzvārds</h1>
+        <p class="role">3. kursa programmēšanas students ar fokusu uz SQL un PHP balstītu backend izstrādi.</p>
+        <p class="stack">SQL · PHP · Laravel · CSS · JS</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="par-mani">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">-- par-mani</span>
+        <h2>Kas es esmu</h2>
+      </div>
+      <div class="about-body">
+        <div>
+          <p>
+            Esmu programmēšanas studiju 3. kursa students ar vidēja līmeņa zināšanām vairākās tehnoloģijās, taču visstiprāk jūtos SQL datubāzu darbā un PHP backend izstrādē, tostarp strādājot ar Laravel ietvaru.
+          </p>
+          <p>
+            Papildus attīstu prasmes CSS un JavaScript jomā, lai spētu strādāt arī ar lietotnes vizuālo pusi un labāk saprastu pilnu izstrādes procesu. Īpaši augstu vērtēju darbu ar jau esošu kodu - atkļūdošanu, dokumentēšanu un ilgtermiņa uzturēšanu, nevis tikai jaunu funkciju rakstīšanu no nulles.
+          </p>
+          <p>
+            Strādāju gan latviešu, gan angļu valodā un ikdienas darbā izmantoju Git un GitHub versiju kontrolei un sadarbībai.
+          </p>
+        </div>
+        <div class="record">
+          <span class="tag">-- ieraksts</span>
+          <div class="row"><span class="k">statuss</span><span class="v">3. kursa students</span></div>
+          <div class="row"><span class="k">līmenis</span><span class="v">vidējs</span></div>
+          <div class="row"><span class="k">fokuss</span><span class="v">SQL &amp; PHP</span></div>
+          <div class="row"><span class="k">ietvars</span><span class="v">Laravel</span></div>
+          <div class="row"><span class="k">valodas</span><span class="v">LV / EN</span></div>
+          <div class="row"><span class="k">rīki</span><span class="v">Git, GitHub</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="prasmes">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">-- prasmes</span>
+        <h2>Ko es protu</h2>
+      </div>
+      <div class="schema-label">tabula: prasmes</div>
+      <table class="skills">
+        <thead>
+          <tr><th>prasme</th><th>kategorija</th><th>līmenis</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>SQL</td><td>Backend</td><td class="dots">●●●●○</td></tr>
+          <tr><td>PHP</td><td>Backend</td><td class="dots">●●●●○</td></tr>
+          <tr><td>Atkļūdošana &amp; uzturēšana</td><td>Prakse</td><td class="dots">●●●○○</td></tr>
+          <tr><td>Laravel</td><td>Framework</td><td class="dots">●●●○○</td></tr>
+          <tr><td>Koda dokumentēšana</td><td>Prakse</td><td class="dots">●●●○○</td></tr>
+          <tr><td>Git / GitHub</td><td>Rīki</td><td class="dots">●●●○○</td></tr>
+          <tr><td>CSS</td><td>Frontend</td><td class="dots">●●●○○</td></tr>
+          <tr><td>JavaScript</td><td>Frontend</td><td class="dots">●●○○○</td></tr>
+          <tr><td>React</td><td>Library</td><td class="dots">●○○○○</td></tr>
+        </tbody>
+      </table>
+      <div class="skills-todo">Saraksts tiek regulāri papildināts, apgūstot jaunas prasmes.</div>
+    </div>
+  </section>
+
+  <section id="projekti">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">-- projekti</span>
+        <h2>Ko esmu būvējis</h2>
+      </div>
+      <div class="projects">
+        <div class="card">
+          <div class="holes"><span></span><span></span></div>
+          <h3>Stipendiju kalkulators</h3>
+          <p>PHP lietotne, kas pieņem e-klases sekmju izrakstu un vērtējumu tabulu Excel formātā, un izrēķina stipendiju. Veidots Draugiem Group konkursam.</p>
+          <div class="tags"><span>PHP</span><span>JS</span><span>Excel</span></div>
+          <a class="link" href="https://github.com/lomasonokswork/scholarship">GitHub</a>
+        </div>
+        <div class="card">
+          <div class="holes"><span></span><span></span></div>
+          <h3>SiteStarter</h3>
+          <p>Saite, kas dod iespēju atrast projektu idejas, krāsu shēmas, fontus un vēl. Pirmais projekts ar datubāzi, autentifikāciju un konta izveidi.</p>
+          <div class="tags"><span>PHP</span><span>JS</span><span>CSS</span><span>SQLite</span></div>
+          <a class="link" href="https://github.com/lomasonokswork/sitestarter_">GitHub</a>
+        </div>
+        <div class="card">
+          <div class="holes"><span></span><span></span></div>
+          <h3>Laravel Blogs</h3>
+          <p>Bloga mājaslapa, kas ir mana pirmā pieredze izmantojot laravel. Ir iespējams izveidot kontu, blogus, kategorijas, komentārus. Saite ir droša pret SQL injekcijām.</p>
+          <div class="tags"><span>Laravel</span><span>PHP</span><span>SQL</span><span>CSS</span></div>
+          <a class="link" href="https://github.com/lomasonokswork/laravelblogs">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakti">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">-- kontakti</span>
+        <h2>Saziņa</h2>
+      </div>
+      <div class="contact-box">
+        <div class="line prompt">whoami --contact</div>
+        <div class="line">e-pasts: <a href="mailto:lomasonoksd@gmail.com">lomasonoksd@gmail.com</a></div>
+        <div class="line">github: <a href="https://github.com/lomasonokswork" target="_blank" rel="noopener">github.com/lomasonokswork</a></div>
+        <div class="line">skolas e-pasts: <a href="mailto:ipb24.d.lomasonoks@vtdt.edu.lv">ipb24.d.lomasonoks@vtdt.edu.lv</a></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© <span id="year"></span> Dāvis Lomašonoks</span>
+  <span>Veidots ar HTML, CSS un JavaScript.</span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  var toggle = document.getElementById('navToggle');
+  var nav = document.getElementById('mainNav');
+  toggle.addEventListener('click', function(){
+    var open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+</script>
+
+</body>
+</html>
