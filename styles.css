@@ -180,6 +180,20 @@ nav a:hover {
   color: #d9a125;
   white-space: pre;
   font-size: 0.82rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 480px) {
+  .terminal {
+    padding: 18px 16px;
+  }
+  .terminal .p1,
+  .terminal .p2 {
+    font-size: 0.8rem;
+  }
+  .terminal .result {
+    font-size: 0.62rem;
+  }
 }
 .cursor {
   display: inline-block;
@@ -361,6 +375,12 @@ table.skills tr:nth-child(even) td {
   content: "-- ";
   color: var(--teal);
 }
+.skills-todo code {
+  font-family: "IBM Plex Mono", monospace;
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  padding: 1px 5px;
+}
 
 /* projects */
 .projects {
@@ -442,6 +462,82 @@ table.skills tr:nth-child(even) td {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.8rem;
   color: var(--ink-soft);
+}
+
+/* video demos */
+.demos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+@media (max-width: 900px) {
+  .demos {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 620px) {
+  .demos {
+    grid-template-columns: 1fr;
+  }
+}
+.demo-card {
+  background: var(--paper-light);
+  border: 1px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--card-shadow);
+  padding: 22px 20px 20px;
+  position: relative;
+}
+.demo-card .holes {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+}
+.demo-card .holes span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1.5px solid var(--ink-soft);
+  display: block;
+}
+.demo-card h3 {
+  margin-top: 20px;
+  font-size: 1.12rem;
+  margin-bottom: 14px;
+}
+.demo-video {
+  width: 100%;
+  display: block;
+  background: var(--teal-deep);
+  border: 1px solid var(--ink);
+  aspect-ratio: 16 / 9;
+}
+.demo-note {
+  margin-top: 16px;
+}
+.demo-note-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.demo-note-label::before {
+  content: "-- ";
+  color: var(--teal);
+}
+.demo-note-text {
+  width: 100%;
+  min-height: 56px;
+  margin: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: "Archivo", sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  padding: 10px 12px;
 }
 
 /* contact */
